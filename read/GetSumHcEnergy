@@ -5,6 +5,7 @@ energyhc1=`ebusctl r -f PrEnergySumHc1`
 energyhwc1=`ebusctl r -f PrEnergySumHwc1`
 LOCALIP=$(hostname -I | cut -d' ' -f1)
 
+# empirically chosen dividers
 dz_hwc1="672.730"
 dz_hc1="747.0"
 
