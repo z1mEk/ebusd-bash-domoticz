@@ -1,0 +1,16 @@
+#!/bin/bash
+
+IDX=402
+#energyhc1=`ebusctl r -m 20 PrEnergySumHc1`
+energyhwc1=`ebusctl r -f PrEnergySumHwc1`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+sumenergy=$energyhwc1 #$[$energyhc1+$energyhwc1]
+
+current=$(curl -k -s "https://$LOCALIP/json.htm?type=devices&rid=$IDX" | jq -r '.result[] | .Data')
+
+if [[ $current != $sumenergy ]] ; then
+    curl -k -s "https://$LOCALIP/json.htm?type=command&param=udevice&idx=$IDX&nvalue=2&svalue=$sumenergy"
+else
+    echo "Update not needed"
+fi

@@ -1,0 +1,19 @@
+#!/bin/bash
+# Hc1DayTemp
+
+IDX=12
+
+DAYTEMP=`ebusctl r -f -c 470 Hc1DayTemp`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+re='^-?[0-9]+([.][0-9]+)?$'
+if [[ $DAYTEMP =~ $re ]] ; then
+
+#    current=$(curl -k -s "https://$LOCALIP/json.htm?type=devices&rid=$IDX" | jq -r '.result[] | .Data')
+
+#    if [[ $current != $DAYTEMP ]] ; then
+        curl -k -s "https://$LOCALIP/json.htm?type=command&param=udevice&idx=$IDX&nvalue=0&svalue=$DAYTEMP"
+#    else
+#	echo "Update not needed"
+#    fi
+fi

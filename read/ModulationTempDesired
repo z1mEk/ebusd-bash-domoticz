@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# ModulationTempDesired
+# Moc palnika
+
+IDX=66
+
+FLAME=`ebusctl r -f -c bai Flame`
+VALUE=`ebusctl r -f -c bai ModulationTempDesired`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+# uzależnienie od tego czy występuje płomień
+if [ $FLAME != "on" ] ; then
+    VALUE=0
+fi
+
+#current=$(curl -k -s "https://$LOCALIP/json.htm?type=devices&rid=$IDX" | jq -r '.result[] | .Data')
+
+echo $VALUE
+
+#if [[ $current != "$VALUE%" ]] ; then
+    curl -k -s "https://$LOCALIP/json.htm?type=command&param=udevice&idx=$IDX&nvalue=2&svalue=$VALUE"
+#else
+#    echo "Update not needed"
+#fi

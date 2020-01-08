@@ -1,0 +1,29 @@
+#!/bin/bash
+# runing every_1min
+
+scripts_path="/opt/domoticz/scripts"
+
+#write interval
+/bin/bash "$scripts_path/ebus/read/Hc1DayTemp"
+/bin/bash "$scripts_path/ebus/read/Hc1NightTemp"
+/bin/bash "$scripts_path/ebus/read/DisplayedRoomTemp"
+/bin/bash "$scripts_path/ebus/read/OutsideTemp"
+/bin/bash "$scripts_path/ebus/read/StorageTemp"
+/bin/bash "$scripts_path/ebus/read/FlowTemp"
+/bin/bash "$scripts_path/ebus/read/ReturnTemp"
+/bin/bash "$scripts_path/ebus/read/WaterPressure"
+/bin/bash "$scripts_path/ebus/read/CirPump"
+/bin/bash "$scripts_path/ebus/read/Hc1Pump"
+/bin/bash "$scripts_path/ebus/read/Hc1OPMode"
+/bin/bash "$scripts_path/ebus/read/Hc1SFMode"
+/bin/bash "$scripts_path/ebus/read/Hc1ActualFlowTempDesired"
+/bin/bash "$scripts_path/ebus/read/DisplayedHc1RoomTempDesired"
+/bin/bash "$scripts_path/ebus/read/Hc1RoomTempSwitchOn"
+/bin/bash "$scripts_path/ebus/read/Hc1HeatCurve"
+/bin/bash "$scripts_path/ebus/read/Hc1AutoOffMode"
+/bin/bash "$scripts_path/ebus/read/GetSumHcEnergy"
+/bin/bash "$scripts_path/ebus/read/ModulationTempDesired"
+/bin/bash "$scripts_path/ebus/read/FanSpeed"
+/bin/bash "$scripts_path/ebus/read/PrEnergySumHc1"
+/bin/bash "$scripts_path/ebus/read/PrEnergySumHwc1"
+/bin/bash "$scripts_path/ebus/read/PositionValveSet"

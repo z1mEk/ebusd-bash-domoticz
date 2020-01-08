@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# CirPump
+
+ebusctl w -c 470 CirPump $1

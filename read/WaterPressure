@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# WaterPressure
+# Ciśnienie wody
+
+IDX=7
+COMMAND=`ebusctl r -f -c bai WaterPressure`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+IFS=';' read -r -a array <<< "$COMMAND"
+VALUE="${array[0]}"
+
+re='^-?[0-9]+([.][0-9]+)?$'
+if [[ $VALUE =~ $re ]] ; then
+
+    current=$(curl -k -s "https://$LOCALIP/json.htm?type=devices&rid=$IDX" | jq -r '.result[] | .Data')
+
+    echo $current
+    echo $VALUE
+    curl -k -s "https://$LOCALIP/json.htm?type=command&param=udevice&idx=$IDX&nvalue=0&svalue=$VALUE"
+fi

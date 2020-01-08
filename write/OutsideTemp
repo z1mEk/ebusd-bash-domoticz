@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#OutsideTemp
+
+ebusctl w -c 470 Outsidetemp "$1;ok"

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Hc1OPMode
+# Stan grzania
+
+IDX=20
+COMMAND=`ebusctl r -f -c 470 Hc1SFMode`
+echo $COMMAND
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+re='^[none|party|onedaybankholiday|onedayholiday|holiday|bankholiday|quickveto|onetimeventilation|onetimewater]*$'
+
+if [[ $COMMAND =~ $re ]] ; then
+    LEVEL=$(
+	case $COMMAND in
+	    "none") echo 10 ;;
+	    "party") echo 20 ;;
+	    "onedaybankholiday") echo 30 ;;
+	    "onedayholiday") echo 40 ;;
+	    "holiday") echo 50 ;;
+	    "bankholiday") echo 60 ;;
+	    "quickveto") echo 70 ;;
+	    "onetimeventilation") echo 80 ;;
+	    "onetimewater") echo 90 ;;
+	esac)
+
+    current=$(curl -k -s "https://$LOCALIP/json.htm?type=devices&rid=$IDX" | jq -r '.result[] | .Data')
+
+    if [[ $current != "Set Level: $LEVEL %" ]] ; then
+	curl -k -s "https://$LOCALIP/json.htm?type=command&param=switchlight&idx=$IDX&switchcmd=Set%20Level&level=$LEVEL"
+    else
+	echo "Update not needed"
+    fi
+fi

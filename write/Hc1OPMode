@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#Hc1OPMode
+
+ebusctl w -c 470 Hc1OPMode $1

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# CirPump
+# Pompa cyrkulacji cwu
+
+IDX=156
+#nie wiem czy bai czy 470 ale jeśli 470 działa to można też sterować.
+#COMMAND=`ebusctl r -c bai CirPump`
+COMMAND=`ebusctl r -f -c 470 CirPump`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+re='^[yes|no]*$'
+
+if [[ $COMMAND =~ $re ]] ; then
+    if [ "$COMMAND" = "yes" ] ; then
+	STAN="On"
+    else
+	STAN="Off"
+    fi
+
+    current=$(curl -k -s "https://$LOCALIP/json.htm?type=devices&rid=$IDX" | jq -r '.result[] | .Data')
+
+    if [[ $STAN != $current ]] ; then
+	curl -s --connect-timeout 60 -k "https://$LOCALIP/json.htm?type=command&param=switchlight&idx=$IDX&switchcmd=$STAN"
+    else
+	echo "Update not needed"
+    fi
+fi

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#Hc1HeatCurve
+
+ebusctl w -c 470 Hc1HeatCurve $1

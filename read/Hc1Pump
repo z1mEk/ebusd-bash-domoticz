@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Hc1Pump
+# Pompa obiegowa co
+
+IDX=155
+COMMAND=`ebusctl r -f -c 470 Hc1Pump`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+re='^[on|off]*$'
+
+if [[ $COMMAND =~ $re ]] ; then
+    if [ "$COMMAND" = "on" ] ; then
+	STAN="On"
+    else
+	STAN="Off"
+    fi
+
+    current=$(curl -k -s "https://$LOCALIP/json.htm?type=devices&rid=$IDX" | jq -r '.result[] | .Data')
+
+    if [[ $current != $STAN ]] ; then
+        curl -k -s "https://$LOCALIP/json.htm?type=command&param=switchlight&idx=$IDX&switchcmd=$STAN"
+    else
+	echo "Update not needed"
+    fi
+fi

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Hc1SFMode
+
+ebusctl w -c 470 Hc1RoomTempSwitchOn $1

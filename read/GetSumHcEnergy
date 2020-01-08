@@ -1,0 +1,24 @@
+#!/bin/bash
+
+IDX=70
+energyhc1=`ebusctl r -f PrEnergySumHc1`
+energyhwc1=`ebusctl r -f PrEnergySumHwc1`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+#dz_hc1="747.351"
+dz_hwc1="672.730"
+dz_hc1="747.0"
+#dz_hwc1="672.7"
+
+VALUE=$(echo "$energyhc1/$dz_hc1+$energyhwc1/$dz_hwc1" | bc -l | xargs printf %.0f)
+
+if [ "$VALUE" -ge 5500000 -a "$VALUE" -le 9000000 ] ; then
+
+#    current=$(curl -k -s "https://$LOCALIP/json.htm?type=devices&rid=$IDX" | jq -r '.result[] | .Data')
+
+#    if [[ ${current//./} != $VALUE ]] ; then
+	curl -k -s "https://$LOCALIP/json.htm?type=command&param=udevice&idx=$IDX&nvalue=2&svalue=$VALUE"
+#    else
+#	echo "Update not needed"
+#    fi
+fi

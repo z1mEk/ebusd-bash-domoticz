@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/bin/bash /opt/domoticz/scripts/ebus/write/DateTime

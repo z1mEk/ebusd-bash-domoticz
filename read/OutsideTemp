@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# OutsideTemp
+# Temperatura zewnętrzna
+
+IDX=2
+COMMAND=`ebusctl r -f -c 470 OutsideTemp`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+IFS=';' read -r -a array <<< "$COMMAND"
+TEMP="${array[0]}"
+
+re='^-?[0-9]+([.][0-9]+)?$'
+if [[ $TEMP =~ $re ]] ; then
+    curl -k -s "https://$LOCALIP/json.htm?type=command&param=udevice&idx=$IDX&nvalue=0&svalue=$TEMP"
+fi

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Hc1OPMode
+# Stan grzania
+
+IDX=10
+COMMAND=`ebusctl r -f -c 470 Hc1OPMode`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+re='^[auto|on|night|summer]*$'
+
+if [[ $COMMAND =~ $re ]] ; then
+    LEVEL=$(
+	case $COMMAND in
+	    "auto") echo 10 ;;
+	    "on") echo 20 ;;
+	    "night") echo 30 ;;
+	    "summer")echo 40 ;;
+	esac)
+
+    current=$(curl -k -s "https://$LOCALIP/json.htm?type=devices&rid=$IDX" | jq -r '.result[] | .Data')
+
+    if [[ $current != "Set Level: $LEVEL %" ]] ; then
+	curl -k -s "https://$LOCALIP/json.htm?type=command&param=switchlight&idx=$IDX&switchcmd=Set%20Level&level=$LEVEL"
+    else
+	echo "Update not needed"
+    fi
+fi

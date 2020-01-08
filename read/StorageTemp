@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# StorageTemp
+# Temperatura w bojlerze
+
+IDX=4
+COMMAND=`ebusctl r -f -c bai StorageTemp`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+IFS=';' read -r -a array <<< "$COMMAND"
+TEMP="${array[0]}"
+
+re='^-?[0-9]+([.][0-9]+)?$'
+if [[ $TEMP =~ $re ]] ; then
+    curl -k -s "https://$LOCALIP/json.htm?type=command&param=udevice&idx=$IDX&nvalue=0&svalue=$TEMP"
+fi

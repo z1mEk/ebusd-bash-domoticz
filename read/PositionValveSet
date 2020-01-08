@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# PositionValveSet
+# Pozycja zaworu przełączającego CWU/CO
+
+IDX=775
+COMMAND=`ebusctl r -f -c bai PositionValveSet`
+LOCALIP=$(hostname -I | cut -d' ' -f1)
+
+re='^[0|1]*$'
+
+if [[ $COMMAND =~ $re ]] ; then
+    if [ "$COMMAND" = "0" ] ; then
+	STAN="CO"
+    else
+	STAN="CWU"
+    fi
+
+    current=$(curl -k -s "https://$LOCALIP/json.htm?type=devices&rid=$IDX" | jq -r '.result[] | .Data')
+
+    if [[ $STAN != $current ]] ; then
+	curl -s --connect-timeout 60 -k "https://$LOCALIP/json.htm?type=command&param=udevice&idx=$IDX&nvalue=0&svalue=$STAN"
+    else
+	echo "Update not needed"
+    fi
+fi
